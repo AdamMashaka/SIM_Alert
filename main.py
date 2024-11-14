@@ -22,7 +22,7 @@ st.sidebar.title("Dashboard")
 app_mode = st.sidebar.selectbox("Select Page", ["Home", "Register", "Database", "About"])
 
 # Main Page
-if app_mode == "Home":
+if app_mode == "Home": # Home Page
     st.header("MACHINE LEARNING(ML) OUR ALERT MODEL")
     image_path = "jisajili.jpeg"
     st.image(image_path, use_container_width=True)
