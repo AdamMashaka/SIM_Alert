@@ -21,7 +21,7 @@ def model_prediction(test_image):
 
 # Sidebar
 st.sidebar.title("Dashboard")
-app_mode = st.sidebar.selectbox("Select Page", ["Home", "Register", "Database", "About"])
+app_mode = st.sidebar.selectbox("Select Page", ["Home", "Register", "Database", "Contacts"])
 
 # Main Page
 if app_mode == "Home": # Home Page
