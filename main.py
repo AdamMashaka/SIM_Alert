@@ -79,7 +79,7 @@ elif app_mode == "Register":
     location = st.text_input("Location")
     nida_number = st.text_input("NIDA Number")
     phone_number = st.text_input("Phone Number")
-    password = st.text_input("Password", type="password")
+    password = st.text_input("Password", type="strong password")
 
     # Check if registration button is clicked
     if st.button("Register"):
