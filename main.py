@@ -2,11 +2,37 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 import streamlit as st
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey, LargeBinary
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker 
+from sqlalchemy.orm import declarative_base, sessionmaker
 import tensorflow as tf
-import numpy as np 
-import cv2 
+import numpy as np
+import cv2
+
+# Database setup for SQLite
+DATABASE_URL = "sqlite:///data_alert.db"  # SQLite database file
+engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+session = SessionLocal()
+Base = declarative_base()
+
+# Define User model for user registration
+class User(Base):
+    __tablename__ = 'user'
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    location = Column(String, nullable=False)
+    nida_number = Column(String, unique=True, nullable=False)
+    phone_number = Column(String, nullable=False)
+    password_hash = Column(String, nullable=False)
+    fingerprint = Column(LargeBinary, nullable=True)
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+# Create tables in the database (if they don’t already exist)
+Base.metadata.create_all(bind=engine)
 
 # Tensorflow Model Prediction
 def model_prediction(test_image):
@@ -22,7 +48,7 @@ st.sidebar.title("Dashboard")
 app_mode = st.sidebar.selectbox("Select Page", ["Home", "Register", "Database", "Contacts"])
 
 # Main Page
-if app_mode == "Home": # Home Page
+if app_mode == "Home":  # Home Page
     st.header("MACHINE LEARNING(ML) OUR ALERT MODEL")
     image_path = "jisajili.jpeg"
     st.image(image_path, use_container_width=True)
@@ -44,69 +70,43 @@ if app_mode == "Home": # Home Page
 
 elif app_mode == "Register":
     st.header("Register your Sim card details here")
-    # Database setup for SQLite
-    DATABASE_URL = "sqlite:///data_alert.db"  # SQLite database file
-    engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    session = SessionLocal()
-    Base = declarative_base()
 
-    # Define User model for user registration
-# Define User model for user registration
-class User(Base):
-    __tablename__ = 'user'
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
-    location = Column(String, nullable=False)
-    nida_number = Column(String, unique=True, nullable=False)
-    phone_number = Column(String, nullable=False)
-    password_hash = Column(String, nullable=False)
-    fingerprint = Column(LargeBinary, nullable=True)
+    # Step 2: User Registration Form
+    st.title("User Registration")
 
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
+    name = st.text_input("Full Name")
+    location = st.text_input("Location")
+    nida_number = st.text_input("NIDA Number")
+    phone_number = st.text_input("Phone Number")
+    password = st.text_input("Password", type="password")
 
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
+    # Fingerprint capture
+    st.subheader("Capture Fingerprint")
+    fingerprint_image = st.file_uploader("Upload Fingerprint Image", type=["png", "jpg", "bmp"])
 
-# Create tables in the database (if they don’t already exist)
-Base.metadata.create_all(bind=engine)
+    # Check if registration button is clicked
+    if st.button("Register"):
+        if name and location and nida_number and phone_number and password and fingerprint_image:
+            # Check if the NIDA number already exists
+            user = session.query(User).filter_by(nida_number=nida_number).first()
+            if user:
+                st.error("A user with that NIDA number already exists.")
+            else:
+                # Read the fingerprint image
+                file_bytes = np.asarray(bytearray(fingerprint_image.read()), dtype=np.uint8)
+                img = cv2.imdecode(file_bytes, cv2.IMREAD_GRAYSCALE)
+                _, buffer = cv2.imencode('.bmp', img)
+                fingerprint_data = buffer.tobytes()
 
-# Step 2: User Registration Form
-st.title("User Registration")
-
-name = st.text_input("Full Name")
-location = st.text_input("Location")
-nida_number = st.text_input("NIDA Number")
-phone_number = st.text_input("Phone Number")
-password = st.text_input("Password", type="password")
-
-# Fingerprint capture
-st.subheader("Capture Fingerprint")
-fingerprint_image = st.file_uploader("Upload Fingerprint Image", type=["png", "jpg", "bmp"])
-
-# Check if registration button is clicked
-if st.button("Register"):
-    if name and location and nida_number and phone_number and password and fingerprint_image:
-        # Check if the NIDA number already exists
-        user = session.query(User).filter_by(nida_number=nida_number).first()
-        if user:
-            st.error("A user with that NIDA number already exists.")
+                # Create a new user and add to the database
+                new_user = User(name=name, location=location, nida_number=nida_number, phone_number=phone_number, fingerprint=fingerprint_data)
+                new_user.set_password(password)  # Hash the password
+                session.add(new_user)
+                session.commit()
+                st.success("Registration successful!")
         else:
-            # Read the fingerprint image
-            file_bytes = np.asarray(bytearray(fingerprint_image.read()), dtype=np.uint8)
-            img = cv2.imdecode(file_bytes, cv2.IMREAD_GRAYSCALE)
-            _, buffer = cv2.imencode('.bmp', img)
-            fingerprint_data = buffer.tobytes()
+            st.error("Please fill in all fields.")
 
-            # Create a new user and add to the database
-            new_user = User(name=name, location=location, nida_number=nida_number, phone_number=phone_number, fingerprint=fingerprint_data)
-            new_user.set_password(password)  # Hash the password
-            session.add(new_user)
-            session.commit()
-            st.success("Registration successful!")
-    else:
-        st.error("Please fill in all fields.")
 elif app_mode == "Database":
     st.header("Alert Recognition")
     test_image = st.file_uploader("Choose an Image:")
