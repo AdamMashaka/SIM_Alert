@@ -6,6 +6,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 import tensorflow as tf
 import numpy as np
 import cv2
+import subprocess
 
 # Database setup for SQLite
 DATABASE_URL = "sqlite:///data_alert.db"  # SQLite database file
@@ -42,6 +43,24 @@ def model_prediction(test_image):
     input_arr = np.array([input_arr])  # convert single image to batch
     predictions = model.predict(input_arr)
     return np.argmax(predictions)  # return index of max element
+
+# Function to capture fingerprint using fprintd
+def capture_fingerprint():
+    try:
+        # Enroll fingerprint using fprintd
+        subprocess.run(["fprintd-enroll"], check=True)
+        # Verify fingerprint and capture the image
+        result = subprocess.run(["fprintd-verify"], capture_output=True, text=True, check=True)
+        if "verify-match" in result.stdout:
+            # Capture the fingerprint image
+            fingerprint_image = subprocess.run(["fprintd-list"], capture_output=True, text=True, check=True)
+            return fingerprint_image.stdout.encode()
+        else:
+            st.error("Fingerprint verification failed.")
+            return None
+    except subprocess.CalledProcessError as e:
+        st.error(f"Error capturing fingerprint: {e}")
+        return None
 
 # Sidebar
 st.sidebar.title("Dashboard")
@@ -83,27 +102,32 @@ elif app_mode == "Register":
     # Fingerprint capture
     st.subheader("Capture Fingerprint")
     fingerprint_image = st.file_uploader("Upload Fingerprint Image", type=["png", "jpg", "bmp"])
+    use_scanner = st.checkbox("Use Laptop Fingerprint Scanner")
 
     # Check if registration button is clicked
     if st.button("Register"):
-        if name and location and nida_number and phone_number and password and fingerprint_image:
+        if name and location and nida_number and phone_number and password and (fingerprint_image or use_scanner):
             # Check if the NIDA number already exists
             user = session.query(User).filter_by(nida_number=nida_number).first()
             if user:
                 st.error("A user with that NIDA number already exists.")
             else:
-                # Read the fingerprint image
-                file_bytes = np.asarray(bytearray(fingerprint_image.read()), dtype=np.uint8)
-                img = cv2.imdecode(file_bytes, cv2.IMREAD_GRAYSCALE)
-                _, buffer = cv2.imencode('.bmp', img)
-                fingerprint_data = buffer.tobytes()
+                if use_scanner:
+                    fingerprint_data = capture_fingerprint()
+                else:
+                    # Read the fingerprint image
+                    file_bytes = np.asarray(bytearray(fingerprint_image.read()), dtype=np.uint8)
+                    img = cv2.imdecode(file_bytes, cv2.IMREAD_GRAYSCALE)
+                    _, buffer = cv2.imencode('.bmp', img)
+                    fingerprint_data = buffer.tobytes()
 
-                # Create a new user and add to the database
-                new_user = User(name=name, location=location, nida_number=nida_number, phone_number=phone_number, fingerprint=fingerprint_data)
-                new_user.set_password(password)  # Hash the password
-                session.add(new_user)
-                session.commit()
-                st.success("Registration successful!")
+                if fingerprint_data:
+                    # Create a new user and add to the database
+                    new_user = User(name=name, location=location, nida_number=nida_number, phone_number=phone_number, fingerprint=fingerprint_data)
+                    new_user.set_password(password)  # Hash the password
+                    session.add(new_user)
+                    session.commit()
+                    st.success("Registration successful!")
         else:
             st.error("Please fill in all fields.")
 
