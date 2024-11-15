@@ -41,9 +41,9 @@ def model_prediction(test_image):
     model = tf.keras.models.load_model("fingerprint_recognition_model.h5")
     image = tf.keras.preprocessing.image.load_img(test_image, target_size=(128, 128))
     input_arr = tf.keras.preprocessing.image.img_to_array(image)
-    input_arr = np.array([input_arr])  # convert single image to batch
+    input_arr = np.array([input_arr])  # Convert single image to batch
     predictions = model.predict(input_arr)
-    return np.argmax(predictions)  # return index of max element
+    return np.argmax(predictions)  # Return index of max element
 
 # Function to capture fingerprint using fprintd
 def capture_fingerprint():
