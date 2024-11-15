@@ -99,7 +99,7 @@ elif app_mode == "Register":
             st.error("Please fill in all fields.")
 
 elif app_mode == "Database":
-    st.header("Disease Recognition")
+    st.header("Alert Recognition")
     test_image = st.file_uploader("Choose an Image:")
     if st.button("Show Image"):
         st.image(test_image, use_container_width=True)
