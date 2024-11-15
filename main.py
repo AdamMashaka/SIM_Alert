@@ -47,8 +47,22 @@ def debug_print_all_users():
 
 if app_mode == "Home":  # Home Page
     st.header("Data Security Alert System")
+    image_path = "jisajili.jpeg"
+    st.image(image_path, use_container_width=True)
     st.markdown("""
     Welcome to the Data Security Alert System! 🎒📳
+    
+    Our mission is to solve in identifying data protection leakage. Register your SIM card details and capture your fingerprint to ensure secure access to your data.
+
+    ### How It Works
+    1. **Register:** Go to the **Register** page and fill in your details.
+    2. **Capture Fingerprint:** Upload your fingerprint image for secure registration.
+    3. **Monitor Access:** Administrators can monitor access to the data and receive alerts for unauthorized access.
+
+    ### Why Choose Us?
+    - **Security:** Advanced machine learning techniques for secure data access.
+    - **User-Friendly:** Simple and intuitive interface for seamless user experience.
+    - **Fast and Efficient:** Quick registration and monitoring process.
     """)
 
 elif app_mode == "Register":
