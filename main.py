@@ -13,7 +13,6 @@ import pandas as pd
 DATABASE_URL = "sqlite:///data_alert.db"  # SQLite database file
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-session = SessionLocal()
 Base = declarative_base()
 
 # Define User model for user registration
