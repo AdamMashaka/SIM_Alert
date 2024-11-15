@@ -131,6 +131,8 @@ elif app_mode == "Register":
                     session.commit()
                     st.success("Registration successful!")
                     st.write(f"Registered user: {new_user.name}, Location: {new_user.location}")
+                else:
+                    st.error("Failed to capture fingerprint.")
         else:
             st.error("Please fill in all fields.")
 
