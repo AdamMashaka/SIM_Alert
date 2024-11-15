@@ -2,7 +2,7 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 import streamlit as st
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey, LargeBinary
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.orm import declarative_base, sessionmaker, scoped_session
 import tensorflow as tf
 import numpy as np
 import cv2
@@ -12,7 +12,7 @@ import pandas as pd
 # Database setup for SQLite
 DATABASE_URL = "sqlite:///data_alert.db"  # SQLite database file
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
 Base = declarative_base()
 
 # Define User model for user registration
@@ -108,30 +108,36 @@ elif app_mode == "Register":
     # Check if registration button is clicked
     if st.button("Register"):
         if name and location and nida_number and phone_number and password and (fingerprint_image or use_scanner):
-            # Check if the NIDA number already exists
-            user = session.query(User).filter_by(nida_number=nida_number).first()
-            if user:
-                st.error("A user with that NIDA number already exists.")
-            else:
-                if use_scanner:
-                    fingerprint_data = capture_fingerprint()
+            session = SessionLocal()
+            try:
+                # Check if the NIDA number already exists
+                user = session.query(User).filter_by(nida_number=nida_number).first()
+                if user:
+                    st.error("A user with that NIDA number already exists.")
                 else:
-                    # Read the fingerprint image
-                    file_bytes = np.asarray(bytearray(fingerprint_image.read()), dtype=np.uint8)
-                    img = cv2.imdecode(file_bytes, cv2.IMREAD_GRAYSCALE)
-                    _, buffer = cv2.imencode('.bmp', img)
-                    fingerprint_data = buffer.tobytes()
+                    if use_scanner:
+                        fingerprint_data = capture_fingerprint()
+                    else:
+                        # Read the fingerprint image
+                        file_bytes = np.asarray(bytearray(fingerprint_image.read()), dtype=np.uint8)
+                        img = cv2.imdecode(file_bytes, cv2.IMREAD_GRAYSCALE)
+                        _, buffer = cv2.imencode('.bmp', img)
+                        fingerprint_data = buffer.tobytes()
 
-                if fingerprint_data:
-                    # Create a new user and add to the database
-                    new_user = User(name=name, location=location, nida_number=nida_number, phone_number=phone_number, fingerprint=fingerprint_data)
-                    new_user.set_password(password)  # Hash the password
-                    session.add(new_user)
-                    session.commit()
-                    st.success("Registration successful!")
-                    st.write(f"Registered user: {new_user.name}, Location: {new_user.location}")
-                else:
-                    st.error("Failed to capture fingerprint.")
+                    if fingerprint_data:
+                        # Create a new user and add to the database
+                        new_user = User(name=name, location=location, nida_number=nida_number, phone_number=phone_number, fingerprint=fingerprint_data)
+                        new_user.set_password(password)  # Hash the password
+                        session.add(new_user)
+                        session.commit()
+                        st.success("Registration successful!")
+                        st.write(f"Registered user: {new_user.name}, Location: {new_user.location}")
+                    else:
+                        st.error("Failed to capture fingerprint.")
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
+            finally:
+                session.close()
         else:
             st.error("Please fill in all fields.")
 
@@ -139,24 +145,30 @@ elif app_mode == "Database":
     st.header("Monitor Access by Location")
     location = st.selectbox("Select Location", ["Dar es Salaam", "Morogoro", "Mwanza", "Arusha"])
 
-    # Query users by location
-    users = session.query(User).filter_by(location=location).all()
+    session = SessionLocal()
+    try:
+        # Query users by location
+        users = session.query(User).filter_by(location=location).all()
 
-    if users:
-        # Display users in a table
-        df = pd.DataFrame([(user.name, user.location, user.nida_number, user.phone_number) for user in users],
-                          columns=["Name", "Location", "NIDA Number", "Phone Number"])
-        st.dataframe(df)
+        if users:
+            # Display users in a table
+            df = pd.DataFrame([(user.name, user.location, user.nida_number, user.phone_number) for user in users],
+                              columns=["Name", "Location", "NIDA Number", "Phone Number"])
+            st.dataframe(df)
 
-        # Download data as CSV
-        csv = df.to_csv(index=False).encode('utf-8')
-        st.download_button(label="Download data as CSV", data=csv, file_name=f'{location}_users.csv', mime='text/csv')
+            # Download data as CSV
+            csv = df.to_csv(index=False).encode('utf-8')
+            st.download_button(label="Download data as CSV", data=csv, file_name=f'{location}_users.csv', mime='text/csv')
 
-        # Print data
-        if st.button("Print Data"):
-            st.write(df.to_html(), unsafe_allow_html=True)
-    else:
-        st.write("No users found for this location.")
+            # Print data
+            if st.button("Print Data"):
+                st.write(df.to_html(), unsafe_allow_html=True)
+        else:
+            st.write("No users found for this location.")
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+    finally:
+        session.close()
 
 elif app_mode == "About":
     st.header("About Us")
