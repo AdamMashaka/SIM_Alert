@@ -6,6 +6,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker 
 import tensorflow as tf
 import numpy as np 
+import cv2 
 
 
 
