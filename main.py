@@ -128,7 +128,7 @@ elif app_mode == "Database":
 elif app_mode == "About":
     st.header("About Us")
     st.markdown("""
-    Learn more about the project, our team, and our goals.
+    Learn more about the project, team, and our goals.
 
     ### About Us
     We are a team of dedicated individuals working towards improving plant health through advanced technology. Our Plant Disease Recognition System is designed to help farmers and gardeners quickly identify and address plant diseases, ensuring healthier crops and better yields.
