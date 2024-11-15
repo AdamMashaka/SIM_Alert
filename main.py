@@ -30,80 +30,72 @@ class User(Base):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-# Drop the existing table and create a new one with the updated schema
-Base.metadata.drop_all(bind=engine)
+# Ensure tables exist
 Base.metadata.create_all(bind=engine)
 
 # Sidebar
 st.sidebar.title("Dashboard")
 app_mode = st.sidebar.selectbox("Select Page", ["Home", "Register", "Database", "About"])
 
-# Main Page
+# Debugging: Print current database content
+def debug_print_all_users():
+    session = SessionLocal()
+    users = session.query(User).all()
+    for user in users:
+        print(f"User: {user.name}, Location: {user.location}, NIDA: {user.nida_number}")
+    session.close()
+
 if app_mode == "Home":  # Home Page
     st.header("Data Security Alert System")
-    image_path = "jisajili.jpeg"
-    st.image(image_path, use_container_width=True)
     st.markdown("""
     Welcome to the Data Security Alert System! 🎒📳
-    
-    Our mission is to solve in identifying data protection leakage. Register your SIM card details and capture your fingerprint to ensure secure access to your data.
-
-    ### How It Works
-    1. **Register:** Go to the **Register** page and fill in your details.
-    2. **Capture Fingerprint:** Upload your fingerprint image for secure registration.
-    3. **Monitor Access:** Administrators can monitor access to the data and receive alerts for unauthorized access.
-
-    ### Why Choose Us?
-    - **Security:** Advanced machine learning techniques for secure data access.
-    - **User-Friendly:** Simple and intuitive interface for seamless user experience.
-    - **Fast and Efficient:** Quick registration and monitoring process.
     """)
 
 elif app_mode == "Register":
     st.header("Register your SIM card details here")
 
-    # Step 2: User Registration Form
     name = st.text_input("Full Name")
     location = st.selectbox("Location", ["Dar es Salaam", "Morogoro", "Mwanza", "Arusha"])
     nida_number = st.text_input("NIDA Number")
     phone_number = st.text_input("Phone Number")
     password = st.text_input("Password", type="password")
-
     fingerprint_image = st.file_uploader("Upload Fingerprint Image", type=["png", "jpg", "bmp"])
-    
+
     if st.button("Register"):
         if name and location and nida_number and phone_number and password and fingerprint_image:
             session = SessionLocal()
             try:
+                # Check if user already exists
                 user = session.query(User).filter_by(nida_number=nida_number).first()
                 if user:
                     st.error("A user with that NIDA number already exists.")
                 else:
-                    # Read fingerprint data
+                    # Process fingerprint data
                     file_bytes = np.asarray(bytearray(fingerprint_image.read()), dtype=np.uint8)
                     img = cv2.imdecode(file_bytes, cv2.IMREAD_GRAYSCALE)
                     _, buffer = cv2.imencode('.bmp', img)
                     fingerprint_data = buffer.tobytes()
 
-                    # Create and save user
+                    # Create new user
                     new_user = User(
-                        name=name,
+                        name=name.strip(),
                         location=location.strip().title(),
-                        nida_number=nida_number,
-                        phone_number=phone_number,
+                        nida_number=nida_number.strip(),
+                        phone_number=phone_number.strip(),
                         fingerprint=fingerprint_data,
                     )
-                    new_user.set_password(password)
+                    new_user.set_password(password.strip())
                     session.add(new_user)
                     session.commit()
 
-                    # Debugging: Confirm saved user
                     st.success(f"User '{new_user.name}' registered successfully.")
-                    st.write(f"Location: {new_user.location}, NIDA: {new_user.nida_number}")
             except Exception as e:
                 st.error(f"An error occurred: {e}")
             finally:
                 session.close()
+
+            # Debugging: Print all users
+            debug_print_all_users()
         else:
             st.error("Please fill in all required fields.")
 
@@ -116,14 +108,8 @@ elif app_mode == "Database":
         # Standardize location formatting
         location = location.strip().title()
         
-        # Debugging: Print location
-        st.write(f"Selected location: {location}")
-        
         # Query users by location
         users = session.query(User).filter_by(location=location).all()
-
-        # Debugging: Print query result
-        st.write(f"Query result: {users}")
 
         if users:
             df = pd.DataFrame(
@@ -131,12 +117,8 @@ elif app_mode == "Database":
                 columns=["Name", "Location", "NIDA Number", "Phone Number"]
             )
             st.dataframe(df)
-
-            # Download data as CSV
-            csv = df.to_csv(index=False).encode('utf-8')
-            st.download_button(label="Download data as CSV", data=csv, file_name=f'{location}_users.csv', mime='text/csv')
         else:
-            st.write("No users found for this location.")
+            st.write(f"No users found for this location: {location}.")
     except Exception as e:
         st.error(f"An error occurred: {e}")
     finally:
@@ -144,15 +126,4 @@ elif app_mode == "Database":
 
 elif app_mode == "About":
     st.header("About Us")
-    st.markdown("""
-    Learn more about the project, team, and our goals.
-
-    ### About Us
-    We are a team of dedicated individuals working towards improving data security through advanced technology. Our Data Security Alert System is designed to help users securely register their SIM card details and monitor access to their data.
-
-    ### Our Mission
-    Our mission is to leverage the power of machine learning and artificial intelligence to provide accurate and efficient data security. We aim to make this technology accessible to everyone, ensuring secure data access for all.
-
-    ### Contact Us
-    If you have any questions or feedback, feel free to reach out to us at [contact@example.com](mailto:contact@example.com).
-    """)
+    st.markdown("Learn more about us!")
