@@ -1,6 +1,6 @@
 # Data Security Alert System
 
-Welcome to the Data Security Alert System repository! This project aims to provide a robust solution for identifying data protection leakage using machine learning techniques. The system includes user registration with fingerprint data, and a machine learning model for recognizing plant diseases.
+Welcome to the Data Security Alert System repository! This project aims to provide a robust solution for identifying data protection leakage using machine learning techniques. The system includes user registration with fingerprint data and alerts when someone accesses data in the database.
 
 ## Table of Contents
 
@@ -15,13 +15,13 @@ Welcome to the Data Security Alert System repository! This project aims to provi
 
 ## Introduction
 
-The Data Security Alert System is designed to help users register their SIM card details securely, including capturing and storing fingerprint data. Additionally, the system includes a machine learning model for recognizing plant diseases from images. This project leverages advanced machine learning techniques to ensure data security and accurate disease detection.
+The Data Security Alert System is designed to help users register their SIM card details securely, including capturing and storing fingerprint data. Additionally, the system includes a machine learning model for recognizing unauthorized access to data. This project leverages advanced machine learning techniques to ensure data security and accurate detection of unauthorized access.
 
 ## Features
 
 - **User Registration**: Register users with their SIM card details and fingerprint data.
 - **Fingerprint Capture**: Capture and store fingerprint images securely.
-- **Plant Disease Recognition**: Upload plant images and get predictions for potential diseases.
+- **Unauthorized Access Detection**: Detect and alert when someone accesses data in the database.
 - **Database Management**: Store and manage user data securely using SQLite.
 
 ## Installation
@@ -62,7 +62,7 @@ The registration page allows users to register their SIM card details and captur
 
 ### Database
 
-The database page allows users to upload an image of a plant and get predictions for potential diseases. The system uses a pre-trained machine learning model to analyze the image and provide results.
+The database page allows administrators to monitor access to the data. Alerts are generated when unauthorized access is detected.
 
 ### About
 
@@ -72,7 +72,7 @@ The about page provides information about the project, the team, and the mission
 
 ### `model_prediction(test_image)`
 
-This method loads a pre-trained TensorFlow model and uses it to predict the class of the uploaded plant image. It returns the index of the predicted class.
+This method loads a pre-trained TensorFlow model and uses it to predict unauthorized access based on the uploaded fingerprint image. It returns the index of the predicted class.
 
 ### `User` Class
 
@@ -88,7 +88,7 @@ The registration logic checks if all fields are filled and if the NIDA number al
 
 ## Model Training
 
-To train the machine learning model for plant disease recognition, follow these steps:
+To train the machine learning model for unauthorized access detection, follow these steps:
 
 1. **Preprocess Fingerprint Images**:
     - Load images from the specified directory.
