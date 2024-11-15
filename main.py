@@ -123,7 +123,7 @@ elif app_mode == "Database":
                       'Tomato___Septoria_leaf_spot', 'Tomato___Spider_mites Two-spotted_spider_mite',
                       'Tomato___Target_Spot', 'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 'Tomato___Tomato_mosaic_virus',
                       'Tomato___healthy']
-        st.success("Model is Predicting it's a {}".format(class_name[result_index]))
+        st.success("Model is Predicting it's not {}".format(class_name[result_index]))
 
 elif app_mode == "About":
     st.header("About Us")
