@@ -141,31 +141,31 @@ if app_mode == "Register":
 elif app_mode == "Database":
     st.header("Monitor Access by Location")
     location = st.selectbox("Select Location", ["Dar es Salaam", "Morogoro", "Mwanza", "Arusha"])
-
     session = SessionLocal()
+
     try:
-        # Query users by location
+        # Debugging: Check the selected location
+        st.write(f"Selected location: {location}")
+        
         users = session.query(User).filter_by(location=location).all()
+        
+        # Debugging: Check query result
+        st.write(f"Query result: {users}")
 
         if users:
-            # Display users in a table
             df = pd.DataFrame([(user.name, user.location, user.nida_number, user.phone_number) for user in users],
                               columns=["Name", "Location", "NIDA Number", "Phone Number"])
             st.dataframe(df)
 
-            # Download data as CSV
             csv = df.to_csv(index=False).encode('utf-8')
             st.download_button(label="Download data as CSV", data=csv, file_name=f'{location}_users.csv', mime='text/csv')
-
-            # Print data
-            if st.button("Print Data"):
-                st.write(df.to_html(), unsafe_allow_html=True)
         else:
             st.write("No users found for this location.")
     except Exception as e:
         st.error(f"An error occurred: {e}")
     finally:
         session.close()
+
 
 elif app_mode == "About":
     st.header("About Us")
