@@ -7,6 +7,7 @@ import tensorflow as tf
 import numpy as np
 import cv2
 import subprocess
+import pandas as pd
 
 # Database setup for SQLite
 DATABASE_URL = "sqlite:///data_alert.db"  # SQLite database file
@@ -94,7 +95,7 @@ elif app_mode == "Register":
     st.title("User Registration")
 
     name = st.text_input("Full Name")
-    location = st.text_input("Location")
+    location = st.selectbox("Location", ["Dar es Salaam", "Morogoro", "Mwanza", "Arusha"])
     nida_number = st.text_input("NIDA Number")
     phone_number = st.text_input("Phone Number")
     password = st.text_input("Password", type="password")
@@ -132,8 +133,27 @@ elif app_mode == "Register":
             st.error("Please fill in all fields.")
 
 elif app_mode == "Database":
-    st.header("Monitor Access")
-    st.write("This section allows administrators to monitor access to the data and receive alerts for unauthorized access.")
+    st.header("Monitor Access by Location")
+    location = st.selectbox("Select Location", ["Dar es Salaam", "Morogoro", "Mwanza", "Arusha"])
+
+    # Query users by location
+    users = session.query(User).filter_by(location=location).all()
+
+    if users:
+        # Display users in a table
+        df = pd.DataFrame([(user.name, user.location, user.nida_number, user.phone_number) for user in users],
+                          columns=["Name", "Location", "NIDA Number", "Phone Number"])
+        st.dataframe(df)
+
+        # Download data as CSV
+        csv = df.to_csv(index=False).encode('utf-8')
+        st.download_button(label="Download data as CSV", data=csv, file_name=f'{location}_users.csv', mime='text/csv')
+
+        # Print data
+        if st.button("Print Data"):
+            st.write(df.to_html(), unsafe_allow_html=True)
+    else:
+        st.write("No users found for this location.")
 
 elif app_mode == "About":
     st.header("About Us")
