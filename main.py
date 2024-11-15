@@ -78,7 +78,7 @@ if app_mode == "Home":  # Home Page
 
     ### How It Works
     1. **Register:** Go to the **Register** page and fill in your details.
-    2. **Capture Fingerprint:** Upload your fingerprint image for secure registration.
+    2. **Capture Fingerprint:** Upload your fingerprint image or use your laptop's fingerprint scanner for secure registration.
     3. **Monitor Access:** Administrators can monitor access to the data and receive alerts for unauthorized access.
 
     ### Why Choose Us?
