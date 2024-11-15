@@ -33,7 +33,8 @@ class User(Base):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-# Create tables in the database (if they don’t already exist)
+# Drop the existing table and create a new one with the updated schema
+Base.metadata.drop_all(bind=engine)
 Base.metadata.create_all(bind=engine)
 
 # Tensorflow Model Prediction
