@@ -88,7 +88,7 @@ if app_mode == "Home":  # Home Page
     - **Fast and Efficient:** Quick registration and monitoring process.
     """)
 
-elif app_mode == "Register":
+if app_mode == "Register":
     st.header("Register your SIM card details here")
 
     # Step 2: User Registration Form
@@ -105,12 +105,10 @@ elif app_mode == "Register":
     fingerprint_image = st.file_uploader("Upload Fingerprint Image", type=["png", "jpg", "bmp"])
     use_scanner = st.checkbox("Use Laptop Fingerprint Scanner")
 
-    # Check if registration button is clicked
     if st.button("Register"):
         if name and location and nida_number and phone_number and password and (fingerprint_image or use_scanner):
             session = SessionLocal()
             try:
-                # Check if the NIDA number already exists
                 user = session.query(User).filter_by(nida_number=nida_number).first()
                 if user:
                     st.error("A user with that NIDA number already exists.")
@@ -118,16 +116,14 @@ elif app_mode == "Register":
                     if use_scanner:
                         fingerprint_data = capture_fingerprint()
                     else:
-                        # Read the fingerprint image
                         file_bytes = np.asarray(bytearray(fingerprint_image.read()), dtype=np.uint8)
                         img = cv2.imdecode(file_bytes, cv2.IMREAD_GRAYSCALE)
                         _, buffer = cv2.imencode('.bmp', img)
                         fingerprint_data = buffer.tobytes()
 
                     if fingerprint_data:
-                        # Create a new user and add to the database
                         new_user = User(name=name, location=location, nida_number=nida_number, phone_number=phone_number, fingerprint=fingerprint_data)
-                        new_user.set_password(password)  # Hash the password
+                        new_user.set_password(password)
                         session.add(new_user)
                         session.commit()
                         st.success("Registration successful!")
@@ -140,6 +136,7 @@ elif app_mode == "Register":
                 session.close()
         else:
             st.error("Please fill in all fields.")
+
 
 elif app_mode == "Database":
     st.header("Monitor Access by Location")
