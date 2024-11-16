@@ -150,5 +150,5 @@ elif app_mode == "About":
     Our mission is to leverage the power of machine learning and artificial intelligence to provide accurate and efficient data security. We aim to make this technology accessible to everyone, ensuring secure data access for all.
 
     ### Contact Us
-    If you have any questions or feedback, feel free to reach out to us at [contact@example.com](mailto:contact@example.com).
+    If you have any questions or feedback, feel free to reach out to us at [contact@example.com](mailto:contact@us.com).
     """)
