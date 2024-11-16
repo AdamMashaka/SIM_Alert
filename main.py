@@ -141,7 +141,7 @@ elif app_mode == "Database":
 elif app_mode == "About":
     st.header("About Us")
     st.markdown("""
-    Learn more about the project, team, and our goals.
+    Learn more about the this project, team, and goals.
 
     ### About Us
     We are a team of dedicated individuals working towards improving data security through advanced technology. Our Data Security Alert System is designed to help users securely register their SIM card details and monitor access to their data.
