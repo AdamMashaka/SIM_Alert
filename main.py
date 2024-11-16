@@ -146,7 +146,7 @@ elif app_mode == "About":
     ### About Us
     We are a team of dedicated individuals working towards improving data security through advanced technology. Our Data Security Alert System is designed to help users securely register their SIM card details and monitor access to their data.
 
-    ### Our Mission
+    ### Our Mission/Goals
     Our mission is to leverage the power of machine learning and artificial intelligence to provide accurate and efficient data security. We aim to make this technology accessible to everyone, ensuring secure data access for all.
 
     ### Contact Us
