@@ -11,7 +11,7 @@ import io
 import base64
 from twilio.rest import Client 
 
-# Database setup for SQLite
+# Database setup for SQLite 
 DATABASE_URL = "sqlite:///data_alert.db"  # SQLite database file
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
