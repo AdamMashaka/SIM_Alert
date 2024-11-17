@@ -111,7 +111,7 @@ if app_mode == "Home":  # Home Page
         <h3>How It Works</h3>
         <ol>
             <li><strong>Register:</strong> Go to the <strong>Register</strong> page and fill in your details.</li>
-            <li><strong>Capture Fingerprint:</strong> Upload your fingerprint image or use your laptop's fingerprint scanner for secure registration.</li>
+            <li><strong>Capture Fingerprint:</strong> Upload your fingerprint image for secure registration.</li>
             <li><strong>Monitor Access:</strong> Administrators can monitor access to the data and receive alerts for unauthorized access.</li>
         </ol>
     </div>
@@ -140,11 +140,10 @@ elif app_mode == "Register":
     # Fingerprint capture
     st.subheader("Capture Fingerprint")
     fingerprint_image = st.file_uploader("Upload Fingerprint Image", type=["png", "jpg", "bmp"])
-    use_scanner = st.checkbox("Use Laptop Fingerprint Scanner")
 
     # Check if registration button is clicked
     if st.button("Register"):
-        if name and location and nida_number and phone_number and password and (fingerprint_image or use_scanner):
+        if name and location and nida_number and phone_number and password and fingerprint_image:
             session = SessionLocal()
             try:
                 # Check if the NIDA number already exists
@@ -152,14 +151,11 @@ elif app_mode == "Register":
                 if user:
                     st.error("A user with that NIDA number already exists.")
                 else:
-                    if use_scanner:
-                        fingerprint_data = capture_fingerprint()
-                    else:
-                        # Read the fingerprint image
-                        file_bytes = np.asarray(bytearray(fingerprint_image.read()), dtype=np.uint8)
-                        img = cv2.imdecode(file_bytes, cv2.IMREAD_GRAYSCALE)
-                        _, buffer = cv2.imencode('.bmp', img)
-                        fingerprint_data = buffer.tobytes()
+                    # Read the fingerprint image
+                    file_bytes = np.asarray(bytearray(fingerprint_image.read()), dtype=np.uint8)
+                    img = cv2.imdecode(file_bytes, cv2.IMREAD_GRAYSCALE)
+                    _, buffer = cv2.imencode('.bmp', img)
+                    fingerprint_data = buffer.tobytes()
 
                     if fingerprint_data:
                         # Create a new user and add to the database
