@@ -20,7 +20,7 @@ Base = declarative_base()
 # Twilio setup
 TWILIO_ACCOUNT_SID = 'AC9db9e83895aa21273238dfd501ee3'
 TWILIO_AUTH_TOKEN = '7f5bfc02b115a1954cb3796e4971ddc7'
-TWILIO_PHONE_NUMBER = '+25594021848'
+TWILIO_PHONE_NUMBER = '+15152001633'
 client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
 # Define User model for user registration
@@ -215,13 +215,10 @@ elif app_mode == "Database":
             # Display the DataFrame as HTML
             st.markdown(df_html, unsafe_allow_html=True)
 
-            # Download data as CSV
-            csv = df.drop(columns=["Fingerprint"]).to_csv(index=False).encode('utf-8')
-            st.download_button(label="Download data as CSV", data=csv, file_name=f'{location}_users.csv', mime='text/csv')
-
-            # Send SMS alerts
-            for user in users:
-                send_sms_alert(user.phone_number, location)
+            # Download data as CSV and send SMS alerts
+            if st.download_button(label="Download data as CSV", data=df.drop(columns=["Fingerprint"]).to_csv(index=False).encode('utf-8'), file_name=f'{location}_users.csv', mime='text/csv'):
+                for user in users:
+                    send_sms_alert(user.phone_number, location)
         else:
             st.write(f"No users found for this location: {location}.")
     except Exception as e:
