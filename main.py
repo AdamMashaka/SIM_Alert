@@ -20,7 +20,7 @@ Base = declarative_base()
 # Twilio setup
 TWILIO_ACCOUNT_SID = 'AC9db9e83895aa21273238dfd501ee3'
 TWILIO_AUTH_TOKEN = '7f5bfc02b115a1954cb3796e4971ddc7'
-TWILIO_PHONE_NUMBER = '+15152001633'
+TWILIO_PHONE_NUMBER = '+25594021848'
 client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
 # Define User model for user registration
