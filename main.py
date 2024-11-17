@@ -18,7 +18,7 @@ SessionLocal = scoped_session(sessionmaker(autocommit=False, autoflush=False, bi
 Base = declarative_base()
 
 # Twilio setup
-TWILIO_ACCOUNT_SID = 'your_account_sid'
+TWILIO_ACCOUNT_SID = 'US9ea28e93d4b8252ae3c7115acb2728'
 TWILIO_AUTH_TOKEN = 'your_auth_token'
 TWILIO_PHONE_NUMBER = 'your_twilio_phone_number'
 client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
