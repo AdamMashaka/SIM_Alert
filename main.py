@@ -113,7 +113,34 @@ elif app_mode == "Register":
         else:
             st.error("Please fill in all required fields.")
 
+elif app_mode == "Database":
+    st.header("Monitor Access by Location")
+    location = st.selectbox("Select Location", ["Dar es Salaam", "Morogoro", "Mwanza", "Arusha"])
 
+    session = SessionLocal()
+    try:
+        # Standardize location formatting
+        location = location.strip().title()
+        
+        # Query users by location
+        users = session.query(User).filter_by(location=location).all()
+
+        if users:
+            for user in users:
+                st.write(f"Name: {user.name}")
+                st.write(f"Location: {user.location}")
+                st.write(f"NIDA Number: {user.nida_number}")
+                st.write(f"Phone Number: {user.phone_number}")
+                if user.fingerprint:
+                    fingerprint_image = Image.open(io.BytesIO(user.fingerprint))
+                    st.image(fingerprint_image, caption="Fingerprint", use_column_width=True)
+                st.write("---")
+        else:
+            st.write(f"No users found for this location: {location}.")
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+    finally:
+        session.close()
 
 elif app_mode == "About":
     st.header("About Us")
