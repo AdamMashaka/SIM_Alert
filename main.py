@@ -8,6 +8,7 @@ import cv2
 from PIL import Image
 import pandas as pd
 import io
+import base64
 
 # Database setup for SQLite
 DATABASE_URL = "sqlite:///data_alert.db"  # SQLite database file
@@ -128,23 +129,31 @@ elif app_mode == "Database":
         if users:
             data = []
             for user in users:
+                if user.fingerprint:
+                    fingerprint_image = Image.open(io.BytesIO(user.fingerprint))
+                    buffered = io.BytesIO()
+                    fingerprint_image.save(buffered, format="PNG")
+                    img_str = base64.b64encode(buffered.getvalue()).decode()
+                    img_html = f'<img src="data:image/png;base64,{img_str}" width="100" height="100">'
+                else:
+                    img_html = "No Image"
+
                 row = {
                     "Name": user.name,
                     "Location": user.location,
                     "NIDA Number": user.nida_number,
                     "Phone Number": user.phone_number,
-                    "Fingerprint": user.fingerprint
+                    "Fingerprint": img_html
                 }
                 data.append(row)
 
             df = pd.DataFrame(data)
-            st.dataframe(df)
 
-            # Display fingerprint images
-            for user in users:
-                if user.fingerprint:
-                    fingerprint_image = Image.open(io.BytesIO(user.fingerprint))
-                    st.image(fingerprint_image, caption=f"Fingerprint of {user.name}", use_container_width=True)
+            # Convert the DataFrame to HTML
+            df_html = df.to_html(escape=False)
+
+            # Display the DataFrame as HTML
+            st.markdown(df_html, unsafe_allow_html=True)
 
             # Download data as CSV
             csv = df.drop(columns=["Fingerprint"]).to_csv(index=False).encode('utf-8')
