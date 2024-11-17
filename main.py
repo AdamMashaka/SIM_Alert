@@ -10,6 +10,7 @@ import pandas as pd
 import io
 import base64
 from twilio.rest import Client
+import tensorflow as tf
 
 # Database setup for SQLite
 DATABASE_URL = "sqlite:///data_alert.db"  # SQLite database file
@@ -22,6 +23,9 @@ TWILIO_ACCOUNT_SID = 'AC9db9e83895aa21273238dfd501ee3'
 TWILIO_AUTH_TOKEN = '7f5bfc02b115a1954cb3796e4971ddc7'
 TWILIO_PHONE_NUMBER = '+15152001633'
 client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+
+# Load TensorFlow model
+model = tf.keras.models.load_model("fingerprint_recognition_model.h5")
 
 # Define User model for user registration
 class User(Base):
@@ -57,6 +61,13 @@ def send_sms_alert(phone_number, location):
         return message.sid
     except Exception as e:
         st.error(f"Failed to send SMS to {phone_number}: {e}")
+
+# Function to predict fingerprint
+def predict_fingerprint(image):
+    image = cv2.resize(image, (128, 128))
+    image = np.expand_dims(image, axis=0)
+    prediction = model.predict(image)
+    return np.argmax(prediction)
 
 # Sidebar
 st.sidebar.title("Dashboard")
@@ -156,6 +167,10 @@ elif app_mode == "Register":
                     img = cv2.imdecode(file_bytes, cv2.IMREAD_GRAYSCALE)
                     _, buffer = cv2.imencode('.bmp', img)
                     fingerprint_data = buffer.tobytes()
+
+                    # Predict fingerprint
+                    prediction = predict_fingerprint(img)
+                    st.write(f"Fingerprint prediction: {prediction}")
 
                     if fingerprint_data:
                         # Create a new user and add to the database
