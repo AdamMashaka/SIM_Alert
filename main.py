@@ -23,7 +23,7 @@ TWILIO_AUTH_TOKEN = '7f5bfc02b115a1954cb3796e4971ddc7'
 TWILIO_PHONE_NUMBER = '+15152001633'
 client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
-# Define User model for user registration
+# Define User model for user registration 
 class User(Base):
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True, index=True)
