@@ -168,14 +168,37 @@ elif app_mode == "Database":
 elif app_mode == "About":
     st.header("About Us")
     st.markdown("""
-    Learn more about the project, team, and our goals.
+    ## Welcome to the Data Security Alert System!
 
-    ### About Us
-    We are a team of dedicated individuals working towards improving data security through advanced technology. Our Data Security Alert System is designed to help users securely register their SIM card details and monitor access to their data.
+    At Data Security Alert System, we are committed to enhancing data security through cutting-edge technology. Our platform is designed to help users securely register their SIM card details and monitor access to their data, ensuring peace of mind and protection against unauthorized access.
+
+    ### Our Vision
+    To be the leading provider of innovative data security solutions, empowering individuals and organizations to safeguard their sensitive information with confidence.
 
     ### Our Mission
-    Our mission is to leverage the power of machine learning and artificial intelligence to provide accurate and efficient data security. We aim to make this technology accessible to everyone, ensuring secure data access for all.
+    Our mission is to leverage the power of machine learning and artificial intelligence to deliver accurate and efficient data security solutions. We strive to make this technology accessible to everyone, ensuring secure data access for all.
+
+    ### Our Values
+    - **Innovation:** Continuously pushing the boundaries of technology to provide the best security solutions.
+    - **Integrity:** Upholding the highest standards of honesty and transparency in all our actions.
+    - **Customer Focus:** Putting our users at the heart of everything we do, ensuring their needs are met with excellence.
+    - **Collaboration:** Working together as a team and with our partners to achieve common goals.
+
+    ### Meet the Team
+    Our team consists of dedicated professionals with expertise in data security, machine learning, and software development. We are passionate about creating solutions that make a difference.
 
     ### Contact Us
-    If you have any questions or feedback, feel free to reach out to us at [contact@example.com](mailto:contact@example.com).
+    We would love to hear from you! If you have any questions, feedback, or inquiries, please feel free to reach out to us.
+
+    - **Email:** [contact@example.com](mailto:contact@example.com)
+    - **Phone:** +123-456-7890
+    - **Address:** 123 Data Security Lane, Tech City, TX 75001
+
+    ### Follow Us
+    Stay connected and follow us on social media for the latest updates and news:
+    - [LinkedIn](https://www.linkedin.com)
+    - [Twitter](https://www.twitter.com)
+    - [Facebook](https://www.facebook.com)
+
+    Thank you for choosing Data Security Alert System. Together, let's build a safer digital world!
     """)
