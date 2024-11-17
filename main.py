@@ -79,9 +79,60 @@ if app_mode == "Home":  # Home Page
     image_path = "jisajili.jpeg"
     st.image(image_path, use_container_width=True)
     st.markdown("""
-    <div style="text-align: center;">
-        <h1>Welcome to the Data Security Alert System! 🎒📳</h1>
-        <p>Our mission is to identify and prevent data protection leakage. Register your SIM card details and capture your fingerprint to ensure secure access to your data.</p>
+    <style>
+    .header {
+        font-size: 2.5em;
+        color: #4CAF50;
+        text-align: center;
+        margin-top: 20px;
+    }
+    .subheader {
+        font-size: 1.5em;
+        color: #555;
+        text-align: center;
+        margin-top: 10px;
+    }
+    .content {
+        font-size: 1.2em;
+        color: #333;
+        margin-top: 20px;
+    }
+    .steps {
+        margin-top: 20px;
+    }
+    .steps li {
+        margin-bottom: 10px;
+    }
+    .why-choose-us {
+        margin-top: 30px;
+    }
+    .why-choose-us li {
+        margin-bottom: 10px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="header">Welcome to the Data Security Alert System! 🎒📳</div>
+    <div class="subheader">Your Trusted Partner in Data Protection</div>
+    <div class="content">
+        Our mission is to identify and prevent data protection leakage. Register your SIM card details and capture your fingerprint to ensure secure access to your data.
+    </div>
+    <div class="steps">
+        <h3>How It Works</h3>
+        <ol>
+            <li><strong>Register:</strong> Go to the <strong>Register</strong> page and fill in your details.</li>
+            <li><strong>Capture Fingerprint:</strong> Upload your fingerprint image for secure registration.</li>
+            <li><strong>Monitor Access:</strong> Administrators can monitor access to the data and receive alerts for unauthorized access.</li>
+        </ol>
+    </div>
+    <div class="why-choose-us">
+        <h3>Why Choose Us?</h3>
+        <ul>
+            <li><strong>Security:</strong> Advanced machine learning techniques for secure data access.</li>
+            <li><strong>User-Friendly:</strong> Simple and intuitive interface for seamless user experience.</li>
+            <li><strong>Fast and Efficient:</strong> Quick registration and monitoring process.</li>
+        </ul>
     </div>
     """, unsafe_allow_html=True)
 
