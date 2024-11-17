@@ -10,7 +10,6 @@ import pandas as pd
 import io
 import base64
 from twilio.rest import Client
-import tensorflow as tf
 
 # Database setup for SQLite
 DATABASE_URL = "sqlite:///data_alert.db"  # SQLite database file
