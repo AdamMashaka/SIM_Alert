@@ -9,16 +9,16 @@ from PIL import Image
 import pandas as pd
 import io
 import base64
-from twilio.rest import Client 
+from twilio.rest import Client
 
-# Database setup for SQLite 
+# Database setup for SQLite
 DATABASE_URL = "sqlite:///data_alert.db"  # SQLite database file
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
 Base = declarative_base()
 
 # Twilio setup
-TWILIO_ACCOUNT_SID = 'AC9db9e83895aa21283e73238dfd501ee3'
+TWILIO_ACCOUNT_SID = 'AC9db9e83895aa212e73238dfd501ee3'
 TWILIO_AUTH_TOKEN = '7f5bfc02b115a1954cb3796e4971ddc7'
 TWILIO_PHONE_NUMBER = '+15152001633'
 client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
@@ -48,12 +48,15 @@ def send_sms_alert(phone_number, location):
     # Ensure phone number is in E.164 format
     if not phone_number.startswith('+'):
         phone_number = '+255' + phone_number.lstrip('0')
-    message = client.messages.create(
-        body=f"Alert: Your data in {location} has been accessed.",
-        from_=TWILIO_PHONE_NUMBER,
-        to=phone_number
-    )
-    return message.sid
+    try:
+        message = client.messages.create(
+            body=f"Alert: Your data in {location} has been accessed.",
+            from_=TWILIO_PHONE_NUMBER,
+            to=phone_number
+        )
+        return message.sid
+    except Exception as e:
+        st.error(f"Failed to send SMS to {phone_number}: {e}")
 
 # Sidebar
 st.sidebar.title("Dashboard")
