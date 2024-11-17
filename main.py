@@ -6,7 +6,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker, scoped_session
 import numpy as np
 import cv2
 from PIL import Image
-import pandas as pd 
+import pandas as pd
 import io
 
 # Database setup for SQLite
@@ -39,14 +39,7 @@ Base.metadata.create_all(bind=engine)
 st.sidebar.title("Dashboard")
 app_mode = st.sidebar.selectbox("Select Page", ["Home", "Register", "Database", "About"])
 
-# Debugging: Print current database content
-def debug_print_all_users():
-    session = SessionLocal()
-    users = session.query(User).all()
-    for user in users:
-        print(f"User: {user.name}, Location: {user.location}, NIDA: {user.nida_number}")
-    session.close()
-
+# Main Page
 if app_mode == "Home":  # Home Page
     st.header("Data Security Alert System")
     image_path = "jisajili.jpeg"
@@ -58,7 +51,7 @@ if app_mode == "Home":  # Home Page
 
     ### How It Works
     1. **Register:** Go to the **Register** page and fill in your details.
-    2. **Capture Fingerprint:** Upload your fingerprint image for secure registration.
+    2. **Capture Fingerprint:** Upload your fingerprint image or use your laptop's fingerprint scanner for secure registration.
     3. **Monitor Access:** Administrators can monitor access to the data and receive alerts for unauthorized access.
 
     ### Why Choose Us?
@@ -70,50 +63,55 @@ if app_mode == "Home":  # Home Page
 elif app_mode == "Register":
     st.header("Register your SIM card details here")
 
+    # Step 2: User Registration Form
+    st.title("User Registration")
+
     name = st.text_input("Full Name")
     location = st.selectbox("Location", ["Dar es Salaam", "Morogoro", "Mwanza", "Arusha"])
     nida_number = st.text_input("NIDA Number")
     phone_number = st.text_input("Phone Number")
     password = st.text_input("Password", type="password")
-    fingerprint_image = st.file_uploader("Upload Fingerprint Image", type=["png", "jpg", "bmp"])
 
+    # Fingerprint capture
+    st.subheader("Capture Fingerprint")
+    fingerprint_image = st.file_uploader("Upload Fingerprint Image", type=["png", "jpg", "bmp"])
+    use_scanner = st.checkbox("Use Laptop Fingerprint Scanner")
+
+    # Check if registration button is clicked
     if st.button("Register"):
-        if name and location and nida_number and phone_number and password and fingerprint_image:
+        if name and location and nida_number and phone_number and password and (fingerprint_image or use_scanner):
             session = SessionLocal()
             try:
-                # Check if user already exists
+                # Check if the NIDA number already exists
                 user = session.query(User).filter_by(nida_number=nida_number).first()
                 if user:
                     st.error("A user with that NIDA number already exists.")
                 else:
-                    # Process fingerprint data
-                    file_bytes = np.asarray(bytearray(fingerprint_image.read()), dtype=np.uint8)
-                    img = cv2.imdecode(file_bytes, cv2.IMREAD_GRAYSCALE)
-                    _, buffer = cv2.imencode('.bmp', img)
-                    fingerprint_data = buffer.tobytes()
+                    if use_scanner:
+                        fingerprint_data = capture_fingerprint()
+                    else:
+                        # Read the fingerprint image
+                        file_bytes = np.asarray(bytearray(fingerprint_image.read()), dtype=np.uint8)
+                        img = cv2.imdecode(file_bytes, cv2.IMREAD_GRAYSCALE)
+                        _, buffer = cv2.imencode('.bmp', img)
+                        fingerprint_data = buffer.tobytes()
 
-                    # Create new user
-                    new_user = User(
-                        name=name.strip(),
-                        location=location.strip().title(),
-                        nida_number=nida_number.strip(),
-                        phone_number=phone_number.strip(),
-                        fingerprint=fingerprint_data,
-                    )
-                    new_user.set_password(password.strip())
-                    session.add(new_user)
-                    session.commit()
-
-                    st.success(f"User '{new_user.name}' registered successfully.")
+                    if fingerprint_data:
+                        # Create a new user and add to the database
+                        new_user = User(name=name, location=location, nida_number=nida_number, phone_number=phone_number, fingerprint=fingerprint_data)
+                        new_user.set_password(password)  # Hash the password
+                        session.add(new_user)
+                        session.commit()
+                        st.success("Registration successful!")
+                        st.write(f"Registered user: {new_user.name}, Location: {new_user.location}")
+                    else:
+                        st.error("Failed to capture fingerprint.")
             except Exception as e:
                 st.error(f"An error occurred: {e}")
             finally:
                 session.close()
-
-            # Debugging: Print all users
-            debug_print_all_users()
         else:
-            st.error("Please fill in all required fields.")
+            st.error("Please fill in all fields.")
 
 elif app_mode == "Database":
     st.header("Monitor Access by Location")
@@ -158,18 +156,17 @@ elif app_mode == "Database":
     finally:
         session.close()
 
-
 elif app_mode == "About":
     st.header("About Us")
     st.markdown("""
-    Learn more about the this project, team and goals.
+    Learn more about the project, team, and our goals.
 
     ### About Us
     We are a team of dedicated individuals working towards improving data security through advanced technology. Our Data Security Alert System is designed to help users securely register their SIM card details and monitor access to their data.
 
-    ### Our Mission/Goals
+    ### Our Mission
     Our mission is to leverage the power of machine learning and artificial intelligence to provide accurate and efficient data security. We aim to make this technology accessible to everyone, ensuring secure data access for all.
 
     ### Contact Us
-    If you have any questions or feedback, feel free to reach out to us at [contact@example.com](mailto:contact@us.com).
+    If you have any questions or feedback, feel free to reach out to us at [contact@example.com](mailto:contact@example.com).
     """)
