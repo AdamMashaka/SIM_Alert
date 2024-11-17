@@ -7,7 +7,7 @@ import numpy as np
 import cv2
 from PIL import Image
 import pandas as pd
-import io 
+import io
 import base64
 from twilio.rest import Client
 
@@ -45,6 +45,9 @@ Base.metadata.create_all(bind=engine)
 
 # Function to send SMS alerts
 def send_sms_alert(phone_number, location):
+    # Ensure phone number is in E.164 format
+    if not phone_number.startswith('+'):
+        phone_number = '+255' + phone_number.lstrip('0')
     message = client.messages.create(
         body=f"Alert: Your data in {location} has been accessed.",
         from_=TWILIO_PHONE_NUMBER,
@@ -230,7 +233,7 @@ elif app_mode == "Database":
 elif app_mode == "About":
     st.header("About Us")
     st.markdown("""
-    ## Welcome to the Data Security Alert System !
+    ## Welcome to the Data Security Alert System!
 
     At Data Security Alert System, we are committed to enhancing data security through cutting-edge technology. Our platform is designed to help users securely register their SIM card details and monitor access to their data, ensuring peace of mind and protection against unauthorized access.
 
