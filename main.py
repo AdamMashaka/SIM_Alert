@@ -113,30 +113,7 @@ elif app_mode == "Register":
         else:
             st.error("Please fill in all required fields.")
 
-elif app_mode == "Database":
-    st.header("Monitor Access by Location")
-    location = st.selectbox("Select Location", ["Dar es Salaam", "Morogoro", "Mwanza", "Arusha"])
-    
-    session = SessionLocal()
-    try:
-        # Standardize location formatting
-        location = location.strip().title()
-        
-        # Query users by location
-        users = session.query(User).filter_by(location=location).all()
 
-        if users:
-            df = pd.DataFrame(
-                [(user.name, user.location, user.nida_number, user.phone_number) for user in users],
-                columns=["Name", "Location", "NIDA Number", "Phone Number"]
-            )
-            st.dataframe(df)
-        else:
-            st.write(f"No users found for this location: {location}.")
-    except Exception as e:
-        st.error(f"An error occurred: {e}")
-    finally:
-        session.close()
 
 elif app_mode == "About":
     st.header("About Us")
