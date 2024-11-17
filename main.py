@@ -230,7 +230,7 @@ elif app_mode == "Database":
 elif app_mode == "About":
     st.header("About Us")
     st.markdown("""
-    ## Welcome to the Data Security Alert System!
+    ## Welcome to the Data Security Alert System !
 
     At Data Security Alert System, we are committed to enhancing data security through cutting-edge technology. Our platform is designed to help users securely register their SIM card details and monitor access to their data, ensuring peace of mind and protection against unauthorized access.
 
