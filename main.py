@@ -128,21 +128,36 @@ elif app_mode == "Database":
         users = session.query(User).filter_by(location=location).all()
 
         if users:
+            data = []
             for user in users:
-                st.write(f"Name: {user.name}")
-                st.write(f"Location: {user.location}")
-                st.write(f"NIDA Number: {user.nida_number}")
-                st.write(f"Phone Number: {user.phone_number}")
+                row = {
+                    "Name": user.name,
+                    "Location": user.location,
+                    "NIDA Number": user.nida_number,
+                    "Phone Number": user.phone_number,
+                    "Fingerprint": user.fingerprint
+                }
+                data.append(row)
+
+            df = pd.DataFrame(data)
+            st.dataframe(df)
+
+            # Display fingerprint images
+            for user in users:
                 if user.fingerprint:
                     fingerprint_image = Image.open(io.BytesIO(user.fingerprint))
-                    st.image(fingerprint_image, caption="Fingerprint", use_column_width=True)
-                st.write("---")
+                    st.image(fingerprint_image, caption=f"Fingerprint of {user.name}", use_column_width=True)
+
+            # Download data as CSV
+            csv = df.drop(columns=["Fingerprint"]).to_csv(index=False).encode('utf-8')
+            st.download_button(label="Download data as CSV", data=csv, file_name=f'{location}_users.csv', mime='text/csv')
         else:
             st.write(f"No users found for this location: {location}.")
     except Exception as e:
         st.error(f"An error occurred: {e}")
     finally:
         session.close()
+
 
 elif app_mode == "About":
     st.header("About Us")
