@@ -9,7 +9,7 @@ from PIL import Image
 import pandas as pd
 import io
 import base64
-from twilio.rest import Client
+from twilio.rest import Client 
 
 # Database setup for SQLite
 DATABASE_URL = "sqlite:///data_alert.db"  # SQLite database file
