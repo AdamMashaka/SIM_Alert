@@ -9,12 +9,19 @@ from PIL import Image
 import pandas as pd
 import io
 import base64
+from twilio.rest import Client
 
 # Database setup for SQLite
 DATABASE_URL = "sqlite:///data_alert.db"  # SQLite database file
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
 Base = declarative_base()
+
+# Twilio setup
+TWILIO_ACCOUNT_SID = 'your_account_sid'
+TWILIO_AUTH_TOKEN = 'your_auth_token'
+TWILIO_PHONE_NUMBER = 'your_twilio_phone_number'
+client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
 # Define User model for user registration
 class User(Base):
@@ -35,6 +42,15 @@ class User(Base):
 
 # Ensure tables exist
 Base.metadata.create_all(bind=engine)
+
+# Function to send SMS alerts
+def send_sms_alert(phone_number, location):
+    message = client.messages.create(
+        body=f"Alert: Your data in {location} has been accessed.",
+        from_=TWILIO_PHONE_NUMBER,
+        to=phone_number
+    )
+    return message.sid
 
 # Sidebar
 st.sidebar.title("Dashboard")
@@ -200,6 +216,10 @@ elif app_mode == "Database":
             # Download data as CSV
             csv = df.drop(columns=["Fingerprint"]).to_csv(index=False).encode('utf-8')
             st.download_button(label="Download data as CSV", data=csv, file_name=f'{location}_users.csv', mime='text/csv')
+
+            # Send SMS alerts
+            for user in users:
+                send_sms_alert(user.phone_number, location)
         else:
             st.write(f"No users found for this location: {location}.")
     except Exception as e:
