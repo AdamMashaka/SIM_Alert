@@ -144,7 +144,7 @@ elif app_mode == "Database":
             for user in users:
                 if user.fingerprint:
                     fingerprint_image = Image.open(io.BytesIO(user.fingerprint))
-                    st.image(fingerprint_image, caption=f"Fingerprint of {user.name}", use_column_width=True)
+                    st.image(fingerprint_image, caption=f"Fingerprint of {user.name}", use_container_width=True)
 
             # Download data as CSV
             csv = df.drop(columns=["Fingerprint"]).to_csv(index=False).encode('utf-8')
