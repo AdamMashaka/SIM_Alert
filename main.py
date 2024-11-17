@@ -19,8 +19,8 @@ SessionLocal = scoped_session(sessionmaker(autocommit=False, autoflush=False, bi
 Base = declarative_base()
 
 # Africa's Talking setup
-AT_USERNAME = "your_africas_talking_username"
-AT_API_KEY = "your_africas_talking_api_key"
+AT_USERNAME = "Adam Katani"
+AT_API_KEY = "atsk_3d33d5c86633640ad2f2c417e22ed471a7584943ce3ba8ad9b78a3d035f984f6ab9d596d"
 africastalking.initialize(AT_USERNAME, AT_API_KEY)
 sms = africastalking.SMS
 
