@@ -46,20 +46,62 @@ if app_mode == "Home":  # Home Page
     image_path = "jisajili.jpeg"
     st.image(image_path, use_container_width=True)
     st.markdown("""
-    Welcome to the Data Security Alert System! 🎒📳
-    
-    Our mission is to solve in identifying data protection leakage. Register your SIM card details and capture your fingerprint to ensure secure access to your data.
+    <style>
+    .header {
+        font-size: 2.5em;
+        color: #4CAF50;
+        text-align: center;
+        margin-top: 20px;
+    }
+    .subheader {
+        font-size: 1.5em;
+        color: #555;
+        text-align: center;
+        margin-top: 10px;
+    }
+    .content {
+        font-size: 1.2em;
+        color: #333;
+        margin-top: 20px;
+    }
+    .steps {
+        margin-top: 20px;
+    }
+    .steps li {
+        margin-bottom: 10px;
+    }
+    .why-choose-us {
+        margin-top: 30px;
+    }
+    .why-choose-us li {
+        margin-bottom: 10px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
-    ### How It Works
-    1. **Register:** Go to the **Register** page and fill in your details.
-    2. **Capture Fingerprint:** Upload your fingerprint image or use your laptop's fingerprint scanner for secure registration.
-    3. **Monitor Access:** Administrators can monitor access to the data and receive alerts for unauthorized access.
-
-    ### Why Choose Us?
-    - **Security:** Advanced machine learning techniques for secure data access.
-    - **User-Friendly:** Simple and intuitive interface for seamless user experience.
-    - **Fast and Efficient:** Quick registration and monitoring process.
-    """)
+    st.markdown("""
+    <div class="header">Welcome to the Data Security Alert System! 🎒📳</div>
+    <div class="subheader">Your Trusted Partner in Data Protection</div>
+    <div class="content">
+        Our mission is to identify and prevent data protection leakage. Register your SIM card details and capture your fingerprint to ensure secure access to your data.
+    </div>
+    <div class="steps">
+        <h3>How It Works</h3>
+        <ol>
+            <li><strong>Register:</strong> Go to the <strong>Register</strong> page and fill in your details.</li>
+            <li><strong>Capture Fingerprint:</strong> Upload your fingerprint image or use your laptop's fingerprint scanner for secure registration.</li>
+            <li><strong>Monitor Access:</strong> Administrators can monitor access to the data and receive alerts for unauthorized access.</li>
+        </ol>
+    </div>
+    <div class="why-choose-us">
+        <h3>Why Choose Us?</h3>
+        <ul>
+            <li><strong>Security:</strong> Advanced machine learning techniques for secure data access.</li>
+            <li><strong>User-Friendly:</strong> Simple and intuitive interface for seamless user experience.</li>
+            <li><strong>Fast and Efficient:</strong> Quick registration and monitoring process.</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
 
 elif app_mode == "Register":
     st.header("Register your SIM card details here")
