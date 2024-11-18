@@ -198,3 +198,5 @@ print(f'Test accuracy: {test_accuracy}')
 model.save('fingerprint_recognition_model.h5')
 
 ```
+
+### Add more metrices for classification 
