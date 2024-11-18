@@ -134,5 +134,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 - The `fprintd` service is used for fingerprint scanning on Linux. Ensure that `fprintd` is installed and configured on your system.
 - This example assumes that the fingerprint scanner is supported by `fprintd`. If you are using a different operating system or fingerprint scanner, you will need to use the appropriate library or SDK for that hardware.
-
-Make sure to replace `'extraction/train_data'` with the actual path to your fingerprint images. Run this script in your Jupyter notebook to preprocess the data, train the model, and save the trained model. The additional checks will help ensure that the images and labels are loaded correctly.
