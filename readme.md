@@ -208,3 +208,5 @@ model.save('fingerprint_recognition_model.h5')
    - Evaluated the model on the test set and printed the accuracy, precision, recall, and AUC.
    - Generated a classification report and confusion matrix using `classification_report` and `confusion_matrix` from `sklearn.metrics`.
 
+
+### Data collection methodology 
