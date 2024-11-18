@@ -199,4 +199,13 @@ model.save('fingerprint_recognition_model.h5')
 
 ```
 
+### Add more metrices for classification
 
+1. **Additional Metrics**:
+   - Added `tf.keras.metrics.Precision()`, `tf.keras.metrics.Recall()`, and `tf.keras.metrics.AUC()` to the [`metrics`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2Fhome%2Fadam%2FDownloads%2FSIM_Alert%2Freadme.md%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%2C%22pos%22%3A%7B%22line%22%3A187%2C%22character%22%3A91%7D%7D%5D%2C%22b3a138b4-5fb9-4bc5-8ce8-84ea1b4f11c0%22%5D "Go to definition") parameter in the `model.compile()` method.
+
+2. **Evaluation**:
+   - Evaluated the model on the test set and printed the accuracy, precision, recall, and AUC.
+   - Generated a classification report and confusion matrix using `classification_report` and `confusion_matrix` from `sklearn.metrics`.
+
+This updated README file provides comprehensive information about the project and detailed steps for improving the accuracy of the fingerprint recognition model, including the addition of more classification metrics.
