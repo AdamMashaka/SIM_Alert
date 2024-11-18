@@ -248,7 +248,7 @@ A robust data collection methodology is crucial for training an accurate and rel
 
 1. **Image Inclusion**:
    - Added an image to the README file using the Markdown syntax for images: `!Sample Fingerprint Image`.
-   - Replace `data.png` with the actual path to your image file in the repository or a URL to the image.
+   - Replace `SIM_Alert/data.png` with the actual path to your image file in the repository or a URL to the image.
 
 2. **Data Collection Methodology**:
    - Provided detailed steps for collecting, annotating, preprocessing, augmenting, splitting, and storing the data.
