@@ -255,5 +255,3 @@ A robust data collection methodology is crucial for training an accurate and rel
 
 3. **Example**:
    - Included an example script for data preprocessing and augmentation, building the model, compiling with additional metrics, training, evaluating, and saving the model.
-
-This updated README file provides comprehensive information about the project, including a robust data collection methodology and an example script for training the fingerprint recognition model. The image inclusion enhances the visual appeal and provides a sample of the data used in the project.
