@@ -197,4 +197,4 @@ print(f'Test accuracy: {test_accuracy}')
 # Save the model
 model.save('fingerprint_recognition_model.h5')
 
-
+```
