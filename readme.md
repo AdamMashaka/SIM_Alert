@@ -213,7 +213,8 @@ model.save('fingerprint_recognition_model.h5')
 
 
 ### Data Collection methodology
-
+ 
+ 
 A robust data collection methodology is crucial for training an accurate and reliable fingerprint recognition model. Here are the steps to collect, preprocess, and manage the data:
 
 1. **Data Collection**:
