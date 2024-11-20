@@ -189,7 +189,6 @@ elif app_mode == "Register":
         else:
             st.error("Please fill in all fields.")
 
-
 elif app_mode == "Database":
     st.header("Monitor Access by Location")
     location = st.selectbox("Select Location", ["Dar es Salaam", "Morogoro", "Mwanza", "Arusha"])
