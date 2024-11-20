@@ -201,7 +201,6 @@ model.save('fingerprint_recognition_model.h5')
 
 
 
-
 ### Add more metrices for classification
 
 1. **Additional Metrics**:
