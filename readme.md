@@ -211,9 +211,7 @@ model.save('fingerprint_recognition_model.h5')
    - Evaluated the model on the test set and printed the accuracy, precision, recall, and AUC.
    - Generated a classification report and confusion matrix using `classification_report` and `confusion_matrix` from `sklearn.metrics`.
 
-
 ### Data Collection methodology
- 
  
 A robust data collection methodology is crucial for training an accurate and reliable fingerprint recognition model. Here are the steps to collect, preprocess, and manage the data:
 
