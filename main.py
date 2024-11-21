@@ -281,7 +281,7 @@ elif app_mode == "About":
 
     ### Follow Us
     Stay connected and follow us on social media for the latest updates and news:
-    - [LinkedIn](https://www.linkedin.com)
+    - [LinkedIn](https://www.linkedin.com/in/adam-katani-b791b2259)
     - [Twitter](https://www.twitter.com)
     - [Facebook](https://www.facebook.com)
 
