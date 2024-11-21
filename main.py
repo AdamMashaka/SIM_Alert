@@ -44,10 +44,10 @@ class User(Base):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-# Ensure tables exist
+
 Base.metadata.create_all(bind=engine)
 
-# Function to send SMS alerts using Africa's Talking
+
 def send_sms_alert(phone_number, location):
     # Ensure phone number is in E.164 format
     if not phone_number.startswith('+'):
