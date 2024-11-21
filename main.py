@@ -276,7 +276,7 @@ elif app_mode == "About":
     We would love to hear from you! If you have any questions, feedback, or inquiries, please feel free to reach out to us.
 
     - **Email:** [contact@abeid.com](mailto:contact@abeid.com)
-    - **Phone:** +123-456-7890
+    - **Phone:** +255772281203
     - **Address:** 123 Data Security Lane, Tech City, TX 75001
 
     ### Follow Us
