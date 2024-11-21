@@ -277,7 +277,7 @@ elif app_mode == "About":
 
     - **Email:** [contact@abeid.com](mailto:contact@abeid.com)
     - **Phone:** +255772281203
-    - **Address:** 123 Data Security Lane, Tech City, TX 75001
+    - **Address:** 123 Zanzibar, Zanzibar city, P O BOX 75001
 
     ### Follow Us
     Stay connected and follow us on social media for the latest updates and news:
