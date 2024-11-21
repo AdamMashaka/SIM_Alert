@@ -13,12 +13,12 @@ import africastalking
 import tensorflow as tf
 
 # Database setup for SQLite
-DATABASE_URL = "sqlite:///data_alert.db"  # SQLite database file
+DATABASE_URL = "sqlite:///data_alert.db"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
 Base = declarative_base()
 
-# Africa's Talking setup
+
 AT_USERNAME = "simalert"
 AT_API_KEY = "atsk_3d33d5c86633640ad2f2c417e22ed471a7584943ce3ba8ad9b78a3d035f984f6ab9d596d"
 africastalking.initialize(AT_USERNAME, AT_API_KEY)
