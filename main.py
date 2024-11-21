@@ -64,10 +64,23 @@ def send_sms_alert(phone_number, location):
 
 # Function to predict fingerprint
 def predict_fingerprint(image):
+    # Resize the image to the required dimensions
     image = cv2.resize(image, (128, 128))
-    image = np.expand_dims(image, axis=0)
+    
+    # Convert the grayscale image to RGB by duplicating the single channel
+    if len(image.shape) == 2:  # If it's a grayscale image
+        image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
+    
+    # Normalize the pixel values to the range [0, 1]
+    image = image / 255.0
+
+    # Expand dimensions to match the model's input shape
+    image = np.expand_dims(image, axis=0)  # Shape becomes (1, 128, 128, 3)
+    
+    # Predict using the model
     prediction = model.predict(image)
     return np.argmax(prediction)
+
 
 # Sidebar
 st.sidebar.title("Dashboard")
