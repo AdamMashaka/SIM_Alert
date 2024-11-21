@@ -240,4 +240,4 @@ A robust data collection methodology is crucial for training an accurate and rel
     - Use a consistent directory structure to facilitate easy loading and management of the data.
 
 
-#  Do not to give it a star
+#  Do not forget to give it a star
