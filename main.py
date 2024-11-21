@@ -55,7 +55,7 @@ def send_sms_alert(phone_number, location):
 
     message = f"Alert: Your data in {location} has been accessed."
     try:
-        # Send SMS
+       
         response = sms.send(message, [phone_number])
         st.success(f"SMS sent to {phone_number}: {response}")
         return response
