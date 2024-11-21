@@ -275,7 +275,7 @@ elif app_mode == "About":
     ### Contact Us
     We would love to hear from you! If you have any questions, feedback, or inquiries, please feel free to reach out to us.
 
-    - **Email:** [contact@example.com](mailto:contact@example.com)
+    - **Email:** [contact@abeid.com](mailto:contact@abeid.com)
     - **Phone:** +123-456-7890
     - **Address:** 123 Data Security Lane, Tech City, TX 75001
 
