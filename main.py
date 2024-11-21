@@ -12,7 +12,7 @@ import base64
 import africastalking
 import tensorflow as tf
 
-# Database setup for SQLite
+
 DATABASE_URL = "sqlite:///data_alert.db"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
@@ -24,10 +24,10 @@ AT_API_KEY = "atsk_3d33d5c86633640ad2f2c417e22ed471a7584943ce3ba8ad9b78a3d035f98
 africastalking.initialize(AT_USERNAME, AT_API_KEY)
 sms = africastalking.SMS
 
-# Load TensorFlow model
+
 model = tf.keras.models.load_model("fingerprint_recognition_model.h5")
 
-# Define User model for user registration
+
 class User(Base):
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True, index=True)
