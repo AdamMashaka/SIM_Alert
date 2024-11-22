@@ -283,7 +283,7 @@ elif app_mode == "About":
     Stay connected and follow us on social media for the latest updates and news:
     - [LinkedIn](https://www.linkedin.com/in/adam-katani-b791b2259)
     - [Twitter](https://x.com/AdamMashak1)
-    - [Facebook](https://www.facebook.com)
+    - [Facebook](https://ww.facebook.com)
 
     Thank you for choosing Data Security Alert System. Together, let's build a safer digital world!
     """)
