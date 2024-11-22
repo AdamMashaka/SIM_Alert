@@ -285,5 +285,5 @@ elif app_mode == "About":
     - [Twitter](https://x.com/AdamMashak1)
     - [Facebook](https://ww.facebook.com)
 
-    Thank you for choosing Data Security Alert System. Together, let's build a safer digital world!
+    Thank you for choosing Our Data Security Alert System. Together, let's build a safer digital world!
     """)
