@@ -19,9 +19,9 @@ SessionLocal = scoped_session(sessionmaker(autocommit=False, autoflush=False, bi
 Base = declarative_base()
 
 
-AT_USERNAME = "pasword"
-#simalert
-AT_API_KEY = "atsk_3d33d5c86633640ad2f2c417e22ed471a7584943ce3ba8ad9b78a3d035f984f6ab9d596d"
+AT_USERNAME = "simalert"
+#simaler
+AT_API_KEY = "atsk_46244b8cdadeae42fdfa74f51b0ec39b5146ae0587835d1498ccfe95bc6cf84ff2b3c5b6"
 africastalking.initialize(AT_USERNAME, AT_API_KEY)
 sms = africastalking.SMS
 
